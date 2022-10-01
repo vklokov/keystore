@@ -18,7 +18,7 @@ func (l *LogWriter) Info(message string) {
 
 func (l *LogWriter) Error(err error) {
 	now := time.Now().UTC()
-	l.Write([]byte(fmt.Sprintf("[%v] *Error: %v\n", now.Format(DATE_TIME_FORMAT), err)))
+	l.Write([]byte(fmt.Sprintf("\n[%v] *Error: %v\n", now.Format(DATE_TIME_FORMAT), err)))
 }
 
 func (l *LogWriter) Write(data []byte) (n int, res error) {

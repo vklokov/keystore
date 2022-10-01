@@ -5,6 +5,6 @@ import (
 	"github.com/vklokov/keystore/handlers"
 )
 
-func Register(app *fiber.App, handler *handlers.AppHandler) {
-	app.Get("/ping", handler.HealthHandler)
+func Register(app *fiber.App, h *handlers.AppHandler) {
+	app.Get("/ping", h.HealthHandler)
 }

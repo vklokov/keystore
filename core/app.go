@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/joho/godotenv"
+	"github.com/vklokov/keystore/db"
 	"github.com/vklokov/keystore/handlers"
 	"github.com/vklokov/keystore/router"
 	"github.com/vklokov/keystore/utils"
@@ -34,6 +35,11 @@ func New() *App {
 
 	handler := handlers.New()
 	handler.Logger = &logWriter
+
+	database := db.Conn()
+	database.AutoMigrate(
+		&db.User{},
+	)
 
 	app := App{
 		Fiber: fiber.New(),
