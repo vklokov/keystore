@@ -2,3 +2,5 @@
 log/*.log
 
 db/pg-data
+
+tmp/*
