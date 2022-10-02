@@ -13,7 +13,7 @@ func main() {
 	app := fiber.New()
 
 	middlewares.Apply(app)
-	controllers.Mount(app)
+	controllers.Init(app)
 
 	app.Listen(":3000")
 }

@@ -4,28 +4,43 @@ import (
 	"encoding/json"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/vklokov/keystore/entities"
 	"github.com/vklokov/keystore/services"
+	"github.com/vklokov/keystore/utils"
 )
 
-func UsersController(router fiber.Router) {
-	router.Post("/", func(ctx *fiber.Ctx) error {
-		params := services.UsersCreateParams{}
+type UsersController struct {
+	BaseController
+}
 
-		json.Unmarshal(ctx.Body(), &params)
+func newUsersController() *UsersController {
+	return &UsersController{}
+}
 
-		token, err := services.UsersRegister(&params)
+// POST: /api/v1/users
+func (self *UsersController) Create(ctx *fiber.Ctx) error {
+	params := services.UsersCreateParams{}
 
-		if err != nil {
-			return ctx.Status(fiber.StatusUnprocessableEntity).JSON(map[string]interface{}{
-				"success": false,
-				"error":   err.Error(),
-			})
-		}
+	json.Unmarshal(ctx.Body(), &params)
 
-		return responseOK(ctx, fiber.Map{
-			"payload": map[string]interface{}{
-				"accessToken": token,
-			},
+	token, err := services.UsersRegister(&params)
+
+	if err != nil {
+		return self.responseWith422(ctx, fiber.Map{
+			"message": err.Error(),
 		})
-	})
+	}
+
+	return self.responseWith200(ctx, fiber.Map{
+		"accessToken": token,
+	}, fiber.Map{})
+}
+
+// GET: /api/v1/users
+func (self *UsersController) Me(ctx *fiber.Ctx) error {
+	user := ctx.Locals(utils.CURRENT_USER).(*entities.User)
+
+	return self.responseWith200(ctx, fiber.Map{
+		"user": user.ToJson(),
+	}, fiber.Map{})
 }
