@@ -1,5 +1,7 @@
 package utils
 
 const (
-	DATE_TIME_FORMAT = "2006-01-02 15:04:05"
+	REGEXP_EMAIL = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+
+	CURRENT_USER = "CURRENT_USER"
 )

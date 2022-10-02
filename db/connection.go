@@ -2,15 +2,17 @@ package db
 
 import (
 	"fmt"
-	"log"
 	"os"
 
+	"github.com/vklokov/keystore/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func Conn() *gorm.DB {
-	dsn := fmt.Sprintf(
+var Conn *gorm.DB
+
+func Connect() error {
+	credentials := fmt.Sprintf(
 		"host=%v user=%v password=%v dbname=%v port=%v sslmode=disable TimeZone=Europe/Berlin",
 		os.Getenv("POSTGRES_HOST"),
 		os.Getenv("POSTGRES_USER"),
@@ -19,11 +21,17 @@ func Conn() *gorm.DB {
 		os.Getenv("POSTGRES_PORT"),
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	conn, err := gorm.Open(postgres.Open(credentials), &gorm.Config{})
 
 	if err != nil {
-		log.Fatalf("* Error connection to Postgres, %v", err)
+		panic(err)
 	}
 
-	return db
+	Conn = conn
+
+	return nil
+}
+
+func Migrate() {
+	Conn.AutoMigrate(&entities.User{})
 }

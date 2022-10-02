@@ -3,6 +3,8 @@ services:
   backend:
     build: .
     command: ./start
+    env_file:
+      - ./.env
     ports:
       - 3000:3000
     volumes:
