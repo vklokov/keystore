@@ -1,0 +1,7 @@
+BEGIN;
+
+ALTER TABLE secrets DROP CONSTRAINT fk_secrets_users;
+
+DROP TABLE IF EXISTS secrets;
+
+COMMIT;

@@ -1,17 +1,23 @@
 package entities
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
 type User struct {
 	gorm.Model
-	ID        uint64 `gorm:"column:id;primaryKey;autoIncrement:true"`
+	ID        uint   `gorm:"column:id"`
 	Name      string `gorm:"column:name"`
-	Email     string `gorm:"column:email;uniqueIndex"`
-	JTI       string `gorm:"column:jti;index"`
+	Email     string `gorm:"column:email"`
+	JTI       string `gorm:"column:jti"`
 	Encrypted string `gorm:"column:encrypted"`
-	Active    bool   `gorm:"column:active;default:false"`
+	Active    bool   `gorm:"column:active"`
+	// Secrets   []Secret
+	DeletedAt time.Time `gorm:"column:deleted_at"`
+	CreatedAt time.Time `gorm:"column:created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at"`
 }
 
 func (self *User) ToJson() map[string]interface{} {

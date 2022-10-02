@@ -1,3 +1,0 @@
-#!/bin/sh
-
-psql -U $POSTGRES_USER --dbname $POSTGRES_DB --host $POSTGRES_HOST -W
