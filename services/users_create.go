@@ -6,20 +6,17 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
-	"github.com/vklokov/keystore/db"
 	"github.com/vklokov/keystore/entities"
 	"github.com/vklokov/keystore/repos"
 	"github.com/vklokov/keystore/utils"
 )
 
 func isUserExist(email string) bool {
-	user := entities.User{}
-	result := db.Conn.
-		Where("email = ? AND active = ?", email, true).
-		Limit(1).
-		Find(&user)
+	if _, err := repos.Users().FindByEmail(email); err != nil {
+		return false
+	}
 
-	return result.RowsAffected > 0
+	return true
 }
 
 func validate(params *UsersCreateParams) error {

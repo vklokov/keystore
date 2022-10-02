@@ -4,7 +4,7 @@ func UsersRegister(params *UsersCreateParams) (string, error) {
 	user, err := UsersCreateService(params)
 
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	return UsersGenerateTokenService(user)
