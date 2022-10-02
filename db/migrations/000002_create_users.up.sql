@@ -7,12 +7,14 @@ CREATE TABLE "users" (
     "jti" varchar NOT NULL,
     "encrypted" varchar NOT NULL,
     "active" boolean NOT NULL DEFAULT(FALSE),
-    "deleted_at" timestamptz,
-    "created_at" timestamptz NOT NULL DEFAULT (NOW()),
-    "updated_at" timestamptz NOT NULL DEFAULT (NOW())
+    "deleted_at" timestamp without time zone,
+    "created_at" timestamp without time zone NOT NULL DEFAULT (NOW()),
+    "updated_at" timestamp without time zone NOT NULL DEFAULT (NOW())
 );
 
 CREATE INDEX ON "users" ("email");
 CREATE INDEX ON "users" ("jti");
+
+CREATE TRIGGER set_timestamp_users BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE trigger_set_timestamp();
 
 COMMIT;

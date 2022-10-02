@@ -18,5 +18,4 @@ func Boot() {
 	environment()
 
 	db.Connect()
-	// db.Migrate()
 }
