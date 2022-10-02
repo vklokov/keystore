@@ -44,9 +44,7 @@ func (self *UsersRepo) Create(user *entities.User) (*entities.User, error) {
 }
 
 func (self *UsersRepo) Update(user *entities.User, attributes map[string]interface{}) (*entities.User, error) {
-	if result := db.Conn.
-		Model(&user).
-		Updates(attributes); result.Error != nil {
+	if result := db.Conn.Model(&user).Updates(attributes); result.Error != nil {
 		return user, result.Error
 	}
 

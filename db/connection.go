@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/vklokov/keystore/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -30,8 +29,4 @@ func Connect() error {
 	Conn = conn
 
 	return nil
-}
-
-func Migrate() {
-	Conn.AutoMigrate(&entities.User{})
 }

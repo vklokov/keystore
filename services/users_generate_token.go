@@ -11,7 +11,10 @@ import (
 )
 
 func UsersGenerateTokenService(user *entities.User) (string, error) {
-	attributes := map[string]interface{}{"jti": uuid.New().String()}
+	attributes := map[string]interface{}{
+		"jti": uuid.New().String(),
+	}
+
 	if _, err := repos.Users().Update(user, attributes); err != nil {
 		return "", err
 	}
