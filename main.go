@@ -10,7 +10,9 @@ import (
 func main() {
 	config.Boot()
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: middlewares.ErrorHandler,
+	})
 
 	middlewares.Apply(app)
 	controllers.Init(app)
