@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/vklokov/keystore/middlewares"
+	mw "github.com/vklokov/keystore/middlewares"
 )
 
 type BaseController struct {
-	AuthController    *AuthController
-	PingController    *PingController
-	UsersController   *UsersController
-	SecretsController *SecretsController
+	Auth    *AuthController
+	Ping    *PingController
+	Users   *UsersController
+	Secrets *SecretsController
 }
 
 func (self *BaseController) responseWith200(ctx *fiber.Ctx, payload fiber.Map) error {
@@ -41,20 +41,20 @@ func (self *BaseController) responseWith422(ctx *fiber.Ctx, payload fiber.Map) e
 }
 
 func Init(app *fiber.App) {
-	c := BaseController{
-		PingController:    newPingController(),
-		UsersController:   newUsersController(),
-		SecretsController: newSecretsController(),
-		AuthController:    newAuthController(),
+	controller := BaseController{
+		Ping:    &PingController{},
+		Users:   &UsersController{},
+		Secrets: &SecretsController{},
+		Auth:    &AuthController{},
 	}
 
-	app.Get("/api/v1/ping", c.PingController.Ping)
+	app.Get("/api/v1/ping", controller.Ping.Ping)
 
-	app.Post("/api/v1/auth", c.AuthController.SignIn)
-	app.Delete("/api/v1/auth", c.AuthController.SignOut)
+	app.Post("/api/v1/auth", controller.Auth.SignIn)
+	app.Delete("/api/v1/auth", controller.Auth.SignOut)
 
-	app.Get("/api/v1/users", middlewares.Auth, c.UsersController.Me)
-	app.Post("/api/v1/users", c.UsersController.Create)
+	app.Get("/api/v1/users", mw.WithJWTAuth, controller.Users.Me)
+	app.Post("/api/v1/users", controller.Users.Create)
 
-	app.Get("/api/v1/secrets", middlewares.Auth, c.SecretsController.All)
+	app.Get("/api/v1/secrets", mw.WithJWTAuth, controller.Secrets.All)
 }

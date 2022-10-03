@@ -8,7 +8,7 @@ import (
 	"github.com/vklokov/keystore/utils"
 )
 
-func Auth(ctx *fiber.Ctx) error {
+func WithJWTAuth(ctx *fiber.Ctx) error {
 	chunks := strings.Split(ctx.Get("Authorization"), " ")
 	accessToken := chunks[len(chunks)-1]
 
