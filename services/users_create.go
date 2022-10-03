@@ -6,13 +6,11 @@ import (
 	"github.com/vklokov/keystore/entities"
 	"github.com/vklokov/keystore/repos"
 	"github.com/vklokov/keystore/utils"
+	"github.com/vklokov/keystore/validations"
 )
 
-func UsersCreateService(params *UsersCreateParams) (*entities.User, *utils.ValidationResult) {
-	validate := validator.New()
-	validate.RegisterValidation("uniq", validateUniqEmail)
-
-	if err := utils.Validate(params, validate); err != nil {
+func UsersCreateService(params *UsersCreateParams) (*entities.User, *validations.VaResult) {
+	if err := validations.Validate(params, createValidator()); err != nil {
 		return nil, err
 	}
 
@@ -27,6 +25,12 @@ func UsersCreateService(params *UsersCreateParams) (*entities.User, *utils.Valid
 	repos.Users().Create(&user)
 
 	return &user, nil
+}
+
+func createValidator() *validator.Validate {
+	v := validator.New()
+	v.RegisterValidation("uniq", validateUniqEmail)
+	return v
 }
 
 func validateUniqEmail(fl validator.FieldLevel) bool {

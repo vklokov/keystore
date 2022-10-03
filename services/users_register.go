@@ -1,10 +1,10 @@
 package services
 
 import (
-	"github.com/vklokov/keystore/utils"
+	"github.com/vklokov/keystore/validations"
 )
 
-func UsersRegister(params *UsersCreateParams) (string, *utils.ValidationResult) {
+func UsersRegister(params *UsersCreateParams) (string, *validations.VaResult) {
 	user, err := UsersCreateService(params)
 
 	if err != nil {
