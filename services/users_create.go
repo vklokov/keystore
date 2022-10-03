@@ -9,26 +9,34 @@ import (
 	"github.com/vklokov/keystore/validations"
 )
 
-func UsersCreateService(params *UsersCreateParams) (*entities.User, *validations.VaResult) {
-	if err := validate(params); err != nil {
+type UsersCreateService struct {
+	User   *entities.User
+	Params *UsersCreateParams
+}
+
+func (self *UsersCreateService) Call() (*entities.User, *validations.VaResult) {
+	if err := self.validate(); err != nil {
 		return nil, err
 	}
 
-	user := entities.User{
-		Name:      params.Name,
-		Email:     params.Email,
-		Active:    true,
-		Encrypted: utils.EncryptString(params.Password),
-		JTI:       uuid.New().String(),
-	}
+	self.persist()
 
-	repos.Users().Create(&user)
-
-	return &user, nil
+	return self.User, nil
 }
 
-func validate(params *UsersCreateParams) *validations.VaResult {
+func (self *UsersCreateService) validate() *validations.VaResult {
 	v := validator.New()
 	v.RegisterValidation("uniq", validations.UsersValidateUniqEmail)
-	return validations.Validate(params, v)
+
+	return validations.Validate(self.Params, v)
+}
+
+func (self *UsersCreateService) persist() {
+	self.User.Name = self.Params.Name
+	self.User.Email = self.Params.Email
+	self.User.Active = true
+	self.User.Encrypted = utils.EncryptString(self.Params.Password)
+	self.User.JTI = uuid.New().String()
+
+	repos.Users().Create(self.User)
 }

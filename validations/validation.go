@@ -46,6 +46,12 @@ func (self *VaResult) ToJson() []VaMap {
 	return result
 }
 
+func CreateResult(errors []*VaError) *VaResult {
+	result := &VaResult{}
+	result.Errors = errors
+	return result
+}
+
 func Validate[T interface{}](params T, v *validator.Validate) *VaResult {
 	errors := []*VaError{}
 	result := &VaResult{}

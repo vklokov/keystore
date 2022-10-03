@@ -19,13 +19,17 @@ func newUsersController() *UsersController {
 
 // POST: /api/v1/users
 func (self *UsersController) Create(ctx *fiber.Ctx) error {
-	params := new(services.UsersCreateParams)
+	params := &services.UsersCreateParams{}
 
 	if err := json.Unmarshal(ctx.Body(), params); err != nil {
 		panic(err)
 	}
 
-	token, err := services.UsersRegister(params)
+	service := services.UsersRegisterService{
+		Params: params,
+	}
+
+	token, err := service.Call()
 
 	if err != nil {
 		return self.responseWith422(ctx, fiber.Map{

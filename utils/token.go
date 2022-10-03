@@ -2,7 +2,6 @@ package utils
 
 import (
 	"crypto/sha1"
-	"crypto/subtle"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -10,14 +9,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v4"
 )
-
-func IsIdentical(a []byte, b []byte) bool {
-	if res := subtle.ConstantTimeCompare(a, b); res != 1 {
-		return false
-	}
-
-	return true
-}
 
 func EncryptString(str string) string {
 	hasher := sha1.New()
