@@ -10,7 +10,7 @@ import (
 )
 
 func UsersCreateService(params *UsersCreateParams) (*entities.User, *validations.VaResult) {
-	if err := validations.Validate(params, createValidator()); err != nil {
+	if err := validate(params); err != nil {
 		return nil, err
 	}
 
@@ -27,16 +27,8 @@ func UsersCreateService(params *UsersCreateParams) (*entities.User, *validations
 	return &user, nil
 }
 
-func createValidator() *validator.Validate {
+func validate(params *UsersCreateParams) *validations.VaResult {
 	v := validator.New()
-	v.RegisterValidation("uniq", validateUniqEmail)
-	return v
-}
-
-func validateUniqEmail(fl validator.FieldLevel) bool {
-	if _, err := repos.Users().FindByEmail(fl.Field().String()); err != nil {
-		return true
-	}
-
-	return false
+	v.RegisterValidation("uniq", validations.UsersValidateUniqEmail)
+	return validations.Validate(params, v)
 }
