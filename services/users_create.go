@@ -1,56 +1,18 @@
 package services
 
 import (
-	"errors"
-	"regexp"
-	"strings"
-
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"github.com/vklokov/keystore/entities"
 	"github.com/vklokov/keystore/repos"
 	"github.com/vklokov/keystore/utils"
 )
 
-func isUserExist(email string) bool {
-	if _, err := repos.Users().FindByEmail(email); err != nil {
-		return false
-	}
+func UsersCreateService(params *UsersCreateParams) (*entities.User, *utils.ValidationResult) {
+	validate := validator.New()
+	validate.RegisterValidation("uniq", validateUniqEmail)
 
-	return true
-}
-
-func validate(params *UsersCreateParams) error {
-	if len(strings.TrimSpace(params.Email)) == 0 {
-		return errors.New("Email required")
-	}
-
-	if isUserExist(params.Email) {
-		return errors.New("Email has already been taken")
-	}
-
-	rg := regexp.MustCompile(utils.REGEXP_EMAIL)
-
-	if !rg.MatchString(params.Email) {
-		return errors.New("Wrong email format")
-	}
-
-	if len(strings.TrimSpace(params.Name)) == 0 {
-		return errors.New("Name required")
-	}
-
-	if len(strings.TrimSpace(params.Password)) == 0 {
-		return errors.New("Password required")
-	}
-
-	if len(strings.TrimSpace(params.Password)) < 8 {
-		return errors.New("Password should contain more than 8 charachters")
-	}
-
-	return nil
-}
-
-func UsersCreateService(params *UsersCreateParams) (*entities.User, error) {
-	if err := validate(params); err != nil {
+	if err := utils.Validate(params, validate); err != nil {
 		return nil, err
 	}
 
@@ -62,5 +24,15 @@ func UsersCreateService(params *UsersCreateParams) (*entities.User, error) {
 		JTI:       uuid.New().String(),
 	}
 
-	return repos.Users().Create(&user)
+	repos.Users().Create(&user)
+
+	return &user, nil
+}
+
+func validateUniqEmail(fl validator.FieldLevel) bool {
+	if _, err := repos.Users().FindByEmail(fl.Field().String()); err != nil {
+		return true
+	}
+
+	return false
 }

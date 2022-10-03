@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"encoding/json"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/vklokov/keystore/entities"
 	"github.com/vklokov/keystore/repos"
@@ -20,8 +18,9 @@ func newAuthController() *AuthController {
 
 func (self *AuthController) SignIn(ctx *fiber.Ctx) error {
 	params := services.UsersSignParams{}
-
-	json.Unmarshal(ctx.Body(), &params)
+	if err := ctx.BodyParser(&params); err != nil {
+		panic(err)
+	}
 
 	user, err := repos.Users().FindByEmail(params.Email)
 
@@ -41,7 +40,7 @@ func (self *AuthController) SignIn(ctx *fiber.Ctx) error {
 		})
 	}
 
-	token, err := services.UsersGenerateTokenService(user)
+	token := services.UsersGenerateTokenService(user)
 
 	if err != nil {
 		return self.responseWith401(ctx, fiber.Map{
@@ -51,16 +50,12 @@ func (self *AuthController) SignIn(ctx *fiber.Ctx) error {
 
 	return self.responseWith200(ctx, fiber.Map{
 		"accessToken": token,
-	}, fiber.Map{})
+	})
 }
 
 func (self *AuthController) SignOut(ctx *fiber.Ctx) error {
 	user := ctx.Locals(utils.CURRENT_USER).(*entities.User)
-	_, err := services.UsersGenerateTokenService(user)
+	services.UsersGenerateTokenService(user)
 
-	if err != nil {
-		return self.responseWith400(ctx, fiber.Map{})
-	}
-
-	return self.responseWith200(ctx, fiber.Map{}, fiber.Map{})
+	return self.responseWith200(ctx, fiber.Map{})
 }

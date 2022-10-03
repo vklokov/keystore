@@ -35,18 +35,18 @@ func (self *UsersRepo) FindByCondition(conditions map[string]interface{}) (*enti
 	return &user, nil
 }
 
-func (self *UsersRepo) Create(user *entities.User) (*entities.User, error) {
+func (self *UsersRepo) Create(user *entities.User) *entities.User {
 	if result := db.Conn.Create(user); result.Error != nil {
-		return nil, result.Error
+		panic(result.Error)
 	}
 
-	return user, nil
+	return user
 }
 
-func (self *UsersRepo) Update(user *entities.User, attributes map[string]interface{}) (*entities.User, error) {
+func (self *UsersRepo) Update(user *entities.User, attributes map[string]interface{}) *entities.User {
 	if result := db.Conn.Model(&user).Updates(attributes); result.Error != nil {
-		return user, result.Error
+		panic(result.Error)
 	}
 
-	return user, nil
+	return user
 }

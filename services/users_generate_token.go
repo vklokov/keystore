@@ -10,17 +10,12 @@ import (
 	"github.com/vklokov/keystore/utils"
 )
 
-func UsersGenerateTokenService(user *entities.User) (string, error) {
+func UsersGenerateTokenService(user *entities.User) string {
 	attributes := map[string]interface{}{
 		"jti": uuid.New().String(),
 	}
-
-	if _, err := repos.Users().Update(user, attributes); err != nil {
-		return "", err
-	}
-
+	repos.Users().Update(user, attributes)
 	tomorrow := time.Now().UTC().Add(24 * time.Hour)
-
 	claims := jwt.MapClaims{
 		"email": user.Email,
 		"jti":   user.JTI,

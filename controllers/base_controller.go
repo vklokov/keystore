@@ -12,15 +12,9 @@ type BaseController struct {
 	SecretsController *SecretsController
 }
 
-func (self *BaseController) responseWith200(ctx *fiber.Ctx, payload fiber.Map, options fiber.Map) error {
-	success := true
-
-	if value, ok := options["success"]; ok {
-		success = value.(bool)
-	}
-
+func (self *BaseController) responseWith200(ctx *fiber.Ctx, payload fiber.Map) error {
 	return ctx.Status(fiber.StatusOK).JSON(&fiber.Map{
-		"success": success,
+		"success": true,
 		"payload": payload,
 	})
 }
@@ -42,7 +36,7 @@ func (self *BaseController) responseWith401(ctx *fiber.Ctx, payload fiber.Map) e
 func (self *BaseController) responseWith422(ctx *fiber.Ctx, payload fiber.Map) error {
 	return ctx.Status(fiber.StatusUnprocessableEntity).JSON(&fiber.Map{
 		"success": false,
-		"error":   payload,
+		"errors":  payload,
 	})
 }
 
