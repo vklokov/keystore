@@ -25,8 +25,14 @@ func EncryptString(str string) string {
 	return base64.URLEncoding.EncodeToString(hasher.Sum(nil))
 }
 
-func GenerateToken(claims *jwt.MapClaims) (string, error) {
-	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(os.Getenv("SECRET_KEY")))
+func GenerateToken(claims *jwt.MapClaims) string {
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(os.Getenv("SECRET_KEY")))
+
+	if err != nil {
+		panic(err)
+	}
+
+	return token
 }
 
 func DecodeToken(accessToken string) (map[string]interface{}, error) {

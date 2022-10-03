@@ -1,9 +1,15 @@
 package middlewares
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/vklokov/keystore/config"
+	"github.com/vklokov/keystore/utils"
+)
 
 func ErrorHandler(ctx *fiber.Ctx, err error) error {
 	code := fiber.StatusInternalServerError
+
+	config.Logger.Error(err)
 
 	if e, ok := err.(*fiber.Error); ok {
 		code = e.Code
@@ -12,7 +18,7 @@ func ErrorHandler(ctx *fiber.Ctx, err error) error {
 	return ctx.Status(code).JSON(fiber.Map{
 		"success": false,
 		"error": map[string]string{
-			"message": "Internal Server Error",
+			"message": utils.INTERNAL_SERVER_ERROR,
 		},
 	})
 }

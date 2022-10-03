@@ -19,21 +19,23 @@ func newUsersController() *UsersController {
 
 // POST: /api/v1/users
 func (self *UsersController) Create(ctx *fiber.Ctx) error {
-	params := services.UsersCreateParams{}
+	params := new(services.UsersCreateParams)
 
-	json.Unmarshal(ctx.Body(), &params)
+	if err := json.Unmarshal(ctx.Body(), params); err != nil {
+		panic(err)
+	}
 
-	token, err := services.UsersRegister(&params)
+	token, err := services.UsersRegister(params)
 
 	if err != nil {
 		return self.responseWith422(ctx, fiber.Map{
-			"message": err.Error(),
+			"errors": err.ToJson(),
 		})
 	}
 
 	return self.responseWith200(ctx, fiber.Map{
 		"accessToken": token,
-	}, fiber.Map{})
+	})
 }
 
 // GET: /api/v1/users
@@ -42,5 +44,5 @@ func (self *UsersController) Me(ctx *fiber.Ctx) error {
 
 	return self.responseWith200(ctx, fiber.Map{
 		"user": user.ToJson(),
-	}, fiber.Map{})
+	})
 }
