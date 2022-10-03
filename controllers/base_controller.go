@@ -22,21 +22,21 @@ func (self *BaseController) responseWith200(ctx *fiber.Ctx, payload fiber.Map) e
 func (self *BaseController) responseWith400(ctx *fiber.Ctx, payload fiber.Map) error {
 	return ctx.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 		"success": false,
-		"error":   payload,
+		"payload": payload,
 	})
 }
 
 func (self *BaseController) responseWith401(ctx *fiber.Ctx, payload fiber.Map) error {
 	return ctx.Status(fiber.StatusBadRequest).JSON(&fiber.Map{
 		"success": false,
-		"error":   payload,
+		"payload": payload,
 	})
 }
 
 func (self *BaseController) responseWith422(ctx *fiber.Ctx, payload fiber.Map) error {
 	return ctx.Status(fiber.StatusUnprocessableEntity).JSON(&fiber.Map{
 		"success": false,
-		"errors":  payload,
+		"payload": payload,
 	})
 }
 
