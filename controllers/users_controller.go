@@ -13,10 +13,6 @@ type UsersController struct {
 	BaseController
 }
 
-func newUsersController() *UsersController {
-	return &UsersController{}
-}
-
 // POST: /api/v1/users
 func (self *UsersController) Create(ctx *fiber.Ctx) error {
 	params := &services.UsersCreateParams{}
