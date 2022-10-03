@@ -17,10 +17,5 @@ func main() {
 	middlewares.Apply(app)
 	controllers.Init(app)
 
-	// user := entities.User{}
-	// db.Conn.Where("email = ?", "klokov.dev@gmail4.com").First(&user)
-	// log.Printf("%v", user.ID)
-	// db.Conn.Model(&user).Updates(map[string]interface{}{"name": "TTTTFFF FFFFF"})
-
 	app.Listen(":3000")
 }
