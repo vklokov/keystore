@@ -1,3 +1,29 @@
+## Controls
+
+### Start
+
+```bash
+make up
+```
+
+### Stop
+
+```bash
+make down
+```
+
+### Shell
+
+```bash
+make shell
+```
+
+### Postgres console
+
+```bash
+make dbconsole
+```
+
 ## Migrations
 
 ### Generate migration
