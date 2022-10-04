@@ -14,7 +14,7 @@ type UsersCreateService struct {
 	Params *UsersCreateParams
 }
 
-func (self *UsersCreateService) Call() (*entities.User, *validations.VaResult) {
+func (self *UsersCreateService) Call() (*entities.User, *validations.Result) {
 	if err := self.validate(); err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (self *UsersCreateService) Call() (*entities.User, *validations.VaResult) {
 	return self.User, nil
 }
 
-func (self *UsersCreateService) validate() *validations.VaResult {
+func (self *UsersCreateService) validate() *validations.Result {
 	v := validator.New()
 	v.RegisterValidation("uniq", validations.UsersValidateUniqEmail)
 

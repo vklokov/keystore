@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/vklokov/keystore/config"
-	"github.com/vklokov/keystore/controllers"
 	"github.com/vklokov/keystore/middlewares"
+	"github.com/vklokov/keystore/router"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 	})
 
 	middlewares.Apply(app)
-	controllers.Init(app)
+	router.New(app)
 
 	app.Listen(":3000")
 }

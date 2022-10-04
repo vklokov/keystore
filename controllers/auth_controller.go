@@ -31,12 +31,10 @@ func (self *AuthController) SignIn(ctx *fiber.Ctx) error {
 	token, err := service.Call()
 
 	if err != nil {
-		return self.responseWith422(ctx, fiber.Map{
-			"errors": err.ToJson(),
-		})
+		return self.responseWith422(ctx, err.ToJson())
 	}
 
-	return self.responseWith200(ctx, fiber.Map{
+	return self.responseWith200(ctx, Map{
 		"accessToken": token,
 	})
 }
@@ -48,5 +46,5 @@ func (self *AuthController) SignOut(ctx *fiber.Ctx) error {
 	}
 	service.Call()
 
-	return self.responseWith200(ctx, fiber.Map{})
+	return self.responseWith200(ctx, Map{})
 }

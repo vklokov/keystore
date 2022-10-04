@@ -30,7 +30,7 @@ func (self *Secret) ToJson() map[string]interface{} {
 		"password": self.Password,
 		"email":    self.Email,
 		"website":  self.Website,
-		"Note":     self.Note,
+		"note":     self.Note,
 		"pkey":     self.Pkey,
 	}
 

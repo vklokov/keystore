@@ -14,7 +14,7 @@ type UsersSignInService struct {
 	User   *entities.User
 }
 
-func (self *UsersSignInService) Call() (string, *validations.VaResult) {
+func (self *UsersSignInService) Call() (string, *validations.Result) {
 	if err := self.findUser(); err != nil {
 		return "", err
 	}
@@ -32,7 +32,7 @@ func (self *UsersSignInService) Call() (string, *validations.VaResult) {
 	return token, nil
 }
 
-func (self *UsersSignInService) findUser() *validations.VaResult {
+func (self *UsersSignInService) findUser() *validations.Result {
 	user, err := repos.Users().FindByEmail(self.Params.Email)
 
 	if err != nil {
@@ -44,7 +44,7 @@ func (self *UsersSignInService) findUser() *validations.VaResult {
 	return nil
 }
 
-func (self *UsersSignInService) validate() *validations.VaResult {
+func (self *UsersSignInService) validate() *validations.Result {
 	a := []byte(self.User.Encrypted)
 	b := []byte(utils.EncryptString(self.Params.Password))
 
@@ -55,7 +55,7 @@ func (self *UsersSignInService) validate() *validations.VaResult {
 	return nil
 }
 
-func handleWrongPasswordError() *validations.VaResult {
+func handleWrongPasswordError() *validations.Result {
 	errorEntity := &validations.VaError{}
 	errorEntity.Field = "Base"
 	errorEntity.Kind = validations.KIND_VALIDATION

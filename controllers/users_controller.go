@@ -28,12 +28,10 @@ func (self *UsersController) Create(ctx *fiber.Ctx) error {
 	token, err := service.Call()
 
 	if err != nil {
-		return self.responseWith422(ctx, fiber.Map{
-			"errors": err.ToJson(),
-		})
+		return self.responseWith422(ctx, err.ToJson())
 	}
 
-	return self.responseWith200(ctx, fiber.Map{
+	return self.responseWith200(ctx, Map{
 		"accessToken": token,
 	})
 }
@@ -42,7 +40,7 @@ func (self *UsersController) Create(ctx *fiber.Ctx) error {
 func (self *UsersController) Me(ctx *fiber.Ctx) error {
 	user := ctx.Locals(utils.CURRENT_USER).(*entities.User)
 
-	return self.responseWith200(ctx, fiber.Map{
+	return self.responseWith200(ctx, Map{
 		"user": user.ToJson(),
 	})
 }

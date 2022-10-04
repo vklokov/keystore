@@ -10,7 +10,7 @@ type UsersRegisterService struct {
 	User   *entities.User
 }
 
-func (self *UsersRegisterService) Call() (string, *validations.VaResult) {
+func (self *UsersRegisterService) Call() (string, *validations.Result) {
 	self.User = &entities.User{}
 
 	if err := self.createUser(); err != nil {
@@ -22,7 +22,7 @@ func (self *UsersRegisterService) Call() (string, *validations.VaResult) {
 	return token, nil
 }
 
-func (self *UsersRegisterService) createUser() *validations.VaResult {
+func (self *UsersRegisterService) createUser() *validations.Result {
 	service := UsersCreateService{
 		Params: self.Params,
 		User:   &entities.User{},

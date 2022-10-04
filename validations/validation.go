@@ -17,17 +17,17 @@ type VaError struct {
 	Kind    string `json:"kind"`
 }
 
-type VaResult struct {
+type Result struct {
 	Errors []*VaError
 }
 
 type VaMap = map[string]interface{}
 
-func (self *VaResult) HasErrors() bool {
+func (self *Result) HasErrors() bool {
 	return len(self.Errors) > 0
 }
 
-func (self *VaResult) ToJson() []VaMap {
+func (self *Result) ToJson() []VaMap {
 	result := []VaMap{}
 
 	for _, err := range self.Errors {
@@ -46,15 +46,15 @@ func (self *VaResult) ToJson() []VaMap {
 	return result
 }
 
-func CreateResult(errors []*VaError) *VaResult {
-	result := &VaResult{}
+func CreateResult(errors []*VaError) *Result {
+	result := &Result{}
 	result.Errors = errors
 	return result
 }
 
-func Validate[T interface{}](params T, v *validator.Validate) *VaResult {
+func Validate[T interface{}](params T, v *validator.Validate) *Result {
 	errors := []*VaError{}
-	result := &VaResult{}
+	result := &Result{}
 
 	err := v.Struct(params)
 
